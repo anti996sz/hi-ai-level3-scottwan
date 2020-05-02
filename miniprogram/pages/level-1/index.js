@@ -105,9 +105,9 @@ Page({
               }
             });
 
-            if(result.RecognitionResult.PornInfo.Code != 0){
+            if(result.RecognitionResult){
               wx.showToast({
-                title: '图片违规',
+                title: '图片安全检查完成',
                 complete: (res) => {},
                 // duration: 0,
                 fail: (res) => {},
