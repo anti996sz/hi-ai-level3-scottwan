@@ -99,13 +99,15 @@ Page({
               data: {
                 action: 'DetectType',
                 cloudPath,
-                opts: { type: "porn" }
+                opts: { 
+                  type: ["porn", "terrorist", "politics"] // "porn" 
+                }
               }
             });
 
             if(result.RecognitionResult.PornInfo.Code != 0){
               wx.showToast({
-                title: '图片涉黄',
+                title: '图片违规',
                 complete: (res) => {},
                 // duration: 0,
                 fail: (res) => {},
