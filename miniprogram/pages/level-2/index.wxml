@@ -1,0 +1,47 @@
+<!--miniprogram/pages/level-2/index.wxml-->
+<!--miniprogram/pages/level-1/index.wxml-->
+
+<view class="detect-face-page" style="{{anonymousState__temp}}">
+	<view class="page-title">人像魅力</view>
+	<view class="label-list">
+		<view class="label-item" wx:key="name" wx:for="{{labelList}}" wx:for-item="item" wx:for-index="_anonIdx2">{{item.name}}</view>
+	</view>
+	<view class="image-wrap">
+		<block>
+			<block wx:if="{{!!faceImageUrl}}">
+				<view class="shape-wrap">
+					<image src="{{faceImageUrl}}" mode="widthFix" class="image-selected"></image>
+					<!-- <view wx:key="shapeIndex" class="{{'shape-item ' + (shape.isActive ? 'shape-item-active' : '')}}" style="{{shape.$loopState__temp3}}" wx:for="{{loopArray12}}" wx:for-item="shape" wx:for-index="_anonIdx4">
+						<view class="shape-area" bindtap="onChooseShape" data-e-tap-so="this" data-e-tap-a-a="{{shape.shapeIndex}}">
+							<view class="face-line left-top"></view>
+							<view class="face-line right-top"></view>
+							<view class="face-line left-bottom"></view>
+							<view class="face-line right-bottom"></view>
+						</view>
+						<block wx:if="{{shape.isActive}}">
+							<view class="{{'shape-desc ' + (shape.left + shape.width + 250 > 600 ? 'in-left' : 'in-right')}}">
+								<view>年龄: {{shape.age}}</view>
+								<view>表情: {{shape.expressionStr}}</view>
+								<view>魅力: {{shape.beauty}}</view>
+								<view>眼镜: {{shape.glassStr}}</view>
+								<view>帽子: {{shape.hatStr}}</view>
+								<view>口罩: {{shape.maskStr}}</view>
+							</view>
+						</block>
+					</view> -->
+				</view>
+			</block>
+			<block wx:else>
+				<view class="to-choose" bindtap="chooseImage"></view>
+			</block>
+		</block>
+		<!-- <view class="image-tips">{{tips}}</view>
+		<block wx:if="{{shapeList.length > 0}}">
+			<scroll-view scroll-x="{{true}}" class="cut-wrap">
+				<image src="{{faceImageUrl}}" mode="aspectFit" bindtap="onChooseShape" class="{{'cut-item ' + (currentShapeIndex === -1 ? 'cut-item-active' : '')}}" data-e-tap-so="this" data-e-tap-a-a="{{-1}}"></image>
+				<image wx:key="fileID" src="{{item.cutFileUrl}}" bindtap="onChooseShape" mode="aspectFit" class="{{'cut-item ' + (currentShapeIndex === item.shapeIndex ? 'cut-item-active' : '')}}" wx:for="{{loopArray13}}" wx:for-item="item" wx:for-index="_anonIdx6" data-e-tap-so="this" data-e-tap-a-a="{{item.shapeIndex}}"></image>
+			</scroll-view>
+		</block> -->
+	</view>
+	<view class="main-button" bindtap="chooseImage">上传</view>
+</view>

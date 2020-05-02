@@ -1,0 +1,18 @@
+<!--miniprogram/pages/level-1/index.wxml-->
+
+<view class="page">
+	<view class="note">上传图片，会自动显示图片的主要特征标签</view>
+
+	<view class="image-wrap">
+		<view class="shape-wrap" wx:if="{{!!faceImageUrl}}">
+			<image src="{{faceImageUrl}}" mode="widthFix" class="image-selected"></image>
+		</view>
+		<view class="to-choose" wx:else bindtap="chooseImage"></view>
+	</view>
+
+	<view class="label-list">
+		<view class="label-item" wx:key="name" wx:for="{{labelList}}" wx:for-item="item" wx:for-index="_anonIdx2">{{item.Name}}</view>
+	</view>
+
+	<view class="main-button" bindtap="chooseImage">上传</view>
+</view>

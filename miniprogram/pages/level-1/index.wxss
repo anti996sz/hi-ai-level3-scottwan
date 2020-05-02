@@ -1,0 +1,81 @@
+/* miniprogram/pages/level-1/index.wxss */
+.page {
+  height: 100vh;
+  box-sizing: border-box;
+  background:rgba(249,249,249,1);
+}
+
+.note {
+  margin-top: 30px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(170, 170, 170, 1);
+  line-height: 20px;
+  text-align: center;
+}
+
+.image-wrap {
+  margin: 50px auto 0;
+  width: 600rpx;
+}
+
+.to-choose {
+  width: 600rpx;
+  height: 600rpx;
+  margin: 0 auto;
+  background: url("https://7363-scottwan-app-demo-7zo30-1301611203.tcb.qcloud.la/tencent-cloud-logo.png?sign=6a6f0f6737eb4044aea05bda0b93e3ed&t=1588423824") no-repeat center/auto 600rpx;
+}
+
+.image-selected {
+  width: 600rpx;
+  /* height: 600rpx; */
+}
+
+.label-list {
+  margin: 25px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 36rpx;
+  margin-bottom: 120rpx;
+}
+
+.label-item {
+  margin: 5px;
+  padding: 4px 7px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 20px;
+
+  border: 1px solid rgba(151, 151, 151, 1);
+}
+
+.main-button {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  background:rgba(49,114,238,1);
+  font-size: 36rpx;
+  line-height: 120rpx;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 8rpx;
+}
+
+.main-button:before {
+  content: '';
+  display: inline-block;
+  width: 54rpx;
+  height: 54rpx;
+  background: url("https://n1image.hjfile.cn/res7/2020/04/12/f6857ca8693d20c87465a0ea1cf236b6.png") no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+  margin: -6rpx 16rpx 0 0;
+}
