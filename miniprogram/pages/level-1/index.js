@@ -75,7 +75,7 @@ Page({
         wx.showLoading({
           title: '图片检测中',
         })
-        
+
         const filePath = chooseResult.tempFilePaths[0]
         const cloudPath = 'img-to-detect' + filePath.match(/\.[^.]+?$/)[0]
 
@@ -94,18 +94,20 @@ Page({
           success: async res => {
             // console.log('上传成功', res)
 
-            let {result} = await wx.cloud.callFunction({
+            let {
+              result
+            } = await wx.cloud.callFunction({
               name: 'imgDetect',
               data: {
                 action: 'DetectType',
                 cloudPath,
-                opts: { 
+                opts: {
                   type: ["porn", "terrorist", "politics"] // "porn" 
                 }
               }
             });
 
-            if(result.RecognitionResult){
+            if (result.RecognitionResult) {
               wx.showToast({
                 title: '图片安全检查完成',
                 complete: (res) => {},
@@ -121,7 +123,6 @@ Page({
                 complete: (res) => {},
               })
 
-              return
             }
 
             wx.cloud.callFunction({
