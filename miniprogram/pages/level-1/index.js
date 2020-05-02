@@ -71,6 +71,11 @@ Page({
       sourceType: ['album', 'camera'],
 
       success: chooseResult => {
+
+        wx.showLoading({
+          title: '图片检测中',
+        })
+        
         const filePath = chooseResult.tempFilePaths[0]
         const cloudPath = 'img-to-detect' + filePath.match(/\.[^.]+?$/)[0]
 
@@ -86,10 +91,39 @@ Page({
           // 指定要上传的文件的小程序临时文件路径
           filePath,
           // 成功回调
-          success: res => {
+          success: async res => {
             // console.log('上传成功', res)
+
+            let {result} = await wx.cloud.callFunction({
+              name: 'imgDetect',
+              data: {
+                action: 'DetectType',
+                cloudPath,
+                opts: { type: "porn" }
+              }
+            });
+
+            if(result.RecognitionResult.PornInfo.Code != 0){
+              wx.showToast({
+                title: '图片涉黄',
+                complete: (res) => {},
+                // duration: 0,
+                fail: (res) => {},
+                // icon: icon,
+                // image: 'image',
+                mask: true,
+                success: (res) => {},
+              })
+
+              wx.hideLoading({
+                complete: (res) => {},
+              })
+
+              return
+            }
+
             wx.cloud.callFunction({
-              name: 'imgLabel',
+              name: 'imgDetect',
               data: {
                 action: 'DetectLabel',
                 cloudPath
@@ -97,8 +131,13 @@ Page({
             }).then(({
               result
             }) => {
+
               this.setData({
                 labelList: result.RecognitionResult.Labels
+              })
+
+              wx.hideLoading({
+                complete: (res) => {},
               })
             })
           },
