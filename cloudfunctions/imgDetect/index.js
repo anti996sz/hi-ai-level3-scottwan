@@ -30,7 +30,7 @@ exports.main = async (event, context) => {
         // console.log(JSON.stringify(res.data, null, 4));
         return res.data
 
-      } catch (err) {
+      } catch (error) {
 
         // console.log(JSON.stringify(err, null, 4));
         return { message: error.message, stack: error.stack }
@@ -50,7 +50,7 @@ exports.main = async (event, context) => {
         // console.log(JSON.stringify(res.data, null, 4));
         return res.data
 
-      } catch (err) {
+      } catch (error) {
 
         // console.log(JSON.stringify(err, null, 4));
         return { message: error.message, stack: error.stack }
