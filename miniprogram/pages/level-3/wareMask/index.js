@@ -86,6 +86,19 @@ Page({
     this.setData({
       cutImageSrc: e.detail.userInfo.avatarUrl
     })
+
+    let that = this
+    
+    wx.downloadFile({
+      url: e.detail.userInfo.avatarUrl,
+      success (res) {
+        // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
+        if (res.statusCode === 200) {
+          that.processImg(res.tempFilePath)
+        }
+      }
+    })
+
   },
 
   onRemoveImage() {
@@ -129,16 +142,19 @@ Page({
     // console.log(this.data.style)
   },
 
-  async onChooseImage() {
+  async onChooseImage(){
+    let {tempFilePaths} = await this.chooseImage()
 
-    let {
-      tempFilePaths
-    } = await this.chooseImage()
     this.setData({
       cutImageSrc: tempFilePaths[0]
     })
 
     let filePath = await tempFilePaths[0]
+
+    this.processImg(filePath)
+  },
+
+  async processImg(filePath) {
 
     // 压缩图片
 
