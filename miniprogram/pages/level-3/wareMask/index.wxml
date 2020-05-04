@@ -1,0 +1,118 @@
+<!--miniprogram/pages/level-3/wareMask/index.wxml-->
+<template name="renderPoster">
+	<block>
+		<view class="{{'poster-dialog ' + (isShowPoster ? 'show' : '')}}">
+			<view class="poster-dialog-main">
+				<block wx:if="{{!!posterSrc}}">
+					<image class="poster-image" src="{{posterSrc}}" bindtap="previewPoster" show-menu-by-longpress="{{true}}"></image>
+				</block>
+				<view class="poster-image-tips">点击可预览大图，长按可分享图片</view>
+				<view class="poster-dialog-close" bindtap="onHidePoster"></view>
+				<view class="poster-footer-btn">
+					<view class="poster-btn-save" bindtap="savePoster">
+						<image class="icon" src="https://n1image.hjfile.cn/res7/2019/01/03/740198f541ce91859ed060882d986e09.png"></image>保存到相册
+					</view>
+					<button class="poster-btn-share" open-type="share" data-poster-src="{{posterSrc}}">
+						<image class="icon-wechat" src="https://n1image.hjfile.cn/res7/2019/03/20/21af29d7755905b08d9f517223df5314.png"></image>分享给朋友
+					</button>
+				</view>
+			</view>
+		</view>
+	</block>
+</template>
+<block wx:if="{{true}}">
+	<view class="mask-page">
+		<canvas class="canvas-mask" style="{{anonymousState__temp2}}" canvas-id="canvasMask" id="bhzzz"></canvas>
+		<view class="main-wrap">
+			<view class="image-position">
+				<block>
+					<block wx:if="{{cutImageSrc}}">
+						<view class="image-wrap">
+							<image src="{{cutImageSrc}}" mode="widthFix" class="image-selected"></image>
+							<block wx:if="{{isShowMask || true}}">
+								<view class="mask-container {{currentShapeIndex === shapeIndex ? 'mask-container-border' : ''}}" 
+									wx:for="{{maskList}}" wx:for-item="mask" wx:for-index="shapeIndex" wx:key="timeNow" 
+									style="top: {{mask.top}}px; left: {{mask.left}}px; width: {{mask.width}}px; height: {{mask.width}}px; transform:rotate({{mask.rotate+'deg'}}) scale({{mask.scale}})" 
+									bindtap="selectMask" mark:index="{{shapeIndex}}"
+								>
+
+									<image class="mask" data-type="mask" mark:index="{{shapeIndex}}" src="../../../images/mask-{{mask.id}}@2x.png" style="" mode="aspectFit"  bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"></image>
+									<block wx:if="{{currentShapeIndex === shapeIndex}}">
+										<block>
+											<view class="image-btn-remove" data-shape-index="{{shapeIndex}}" bindtap="removeShape"></view>
+											<view class="image-btn-resize" data-shape-index="{{shapeIndex}}" data-type="rotate-resize"></view>
+											<view class="image-btn-reverse" data-shape-index="{{shapeIndex}}" bindtap="reverseShape"></view>
+											<view class="image-btn-checked" data-shape-index="{{shapeIndex}}" bindtap="checkedShape"></view>
+										</block>
+									</block>
+								</view>
+							</block>
+							<block wx:if="{{isShowMask && currentJiayouId > 0}}">
+								<view class="image-jiayou">
+									<image id="mask" src="{{anonymousState__temp9}}"></image>
+									<view class="image-btn-jiayou" bindtap="chooseJiayouId"></view>
+								</view>
+							</block>
+						</view>
+					</block>
+					<block wx:else>
+						<view class="to-choose" data-way="album" bindtap="onChooseImage" data-e-tap-so="this" data-e-tap-a-a="album"></view>
+					</block>
+				</block>
+			</view>
+			<block>
+				<block wx:if="{{cutImageSrc}}">
+					<view class="button-wrap">
+						<view class="button-remove" bindtap="onRemoveImage">移除图片</view>
+						<view class="button-download" bindtap="generateImage">保存图片</view>
+					</view>
+				</block>
+				<block wx:else>
+					<view class="button-wrap">
+						<view class="buttom-tips">更多选择</view>
+						<view class="flex flex-center">
+							<view class="flex-1"></view>
+							<button class="button-avatar  flex-1" type="default" data-way="avatar" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">使用头像</button>
+							<button class="button-camera  flex-1" type="default" data-way="camera" bindtap="onChooseImage" data-e-tap-so="this" data-e-tap-a-a="camera">使用相机</button>
+							<view class="flex-1"></view>
+						</view>
+					</view>
+				</block>
+			</block>
+		</view>
+		<view class="cropper-wrap" hidden="{{!originSrc}}">
+			<taro-cropper id="bizzz" compid="{{$compid__9}}"></taro-cropper>
+		</view>
+		<block>
+			<block wx:if="{{cutImageSrc}}">
+				<view class="tab-wrap">
+					<view class="tab-hd">
+						<view wx:key="name" class="{{'tab-hd-item ' + (currentTabIndex === itemIndex ? 'tab-hd-active' : '')}}" bindtap="chooseTab" wx:for="{{materialList}}" wx:for-item="item" wx:for-index="itemIndex" data-e-tap-so="this" data-e-tap-a-a="{{itemIndex}}">
+							<image class="tab-hd-image" src="{{item.icon}}" mode="aspectFit"></image>
+						</view>
+					</view>
+					<view class="tab-bd">
+						<!-- <view wx:key="name" style="{{item.$loopState__temp11}}" wx:for="{{[1]}}" wx:for-item="item" wx:for-index="itemIndex"> -->
+							<scroll-view class="mask-select-wrap" scroll-x="{{true}}">
+								<image class="{{'tab-bd-image  tab-bd-image-' + item.$original.name}}" wx:key="index" src="../../../images/mask-{{imgId}}.png" bindtap="setMask" mark:id="{{imgId}}" wx:for="{{[1,2,3,4,5,6,7]}}" wx:for-item="imgId" mode="aspectFit"></image>
+							</scroll-view>
+						<!-- </view> -->
+					</view>
+				</view>
+			</block>
+			<block wx:else>
+				<view class="bottom-tips-wrap"><text>{{'备注：\n选择后会识别图中人脸，并自动戴上口罩\n识别过程需几秒钟，请耐心等待'}}</text>
+				</view>
+			</block>
+		</block>
+		<!-- <block wx:if="{{!originSrc}}">
+            <block>
+                <view class="test-hat-btn" bindtap="goTestHat">圣诞帽测试</view>
+                <button class="share-btn" open-type="share" bindtap="showH5Modal">分享给朋友
+                    <view class="share-btn-icon"></view>
+                </button>
+            </block>
+        </block> -->
+		<template is="renderPoster" data="{{...anonymousState__temp}}"></template>
+	</view>
+</block>

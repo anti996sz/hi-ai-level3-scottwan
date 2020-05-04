@@ -21,7 +21,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": true,
+		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"appid": "wxd570e9f74c55ca29",
@@ -63,6 +63,13 @@
 					"id": -1,
 					"name": "level-2",
 					"pathName": "pages/level-2/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "level-3 wareMask",
+					"pathName": "pages/level-3/wareMask/index",
 					"query": "",
 					"scene": null
 				}

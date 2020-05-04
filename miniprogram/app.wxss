@@ -1,4 +1,22 @@
 /**app.wxss**/
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1 1 25%;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.border {
+  border: solid 1px red;
+}
+
+/* 
 .container {
   display: flex;
   flex-direction: column;
@@ -153,4 +171,4 @@ page {
   font-size: 24rpx;
   line-height: 36rpx;
   word-break: break-all;
-}
+} */
