@@ -1,0 +1,74 @@
+/* miniprogram/pages/level-3/poster/index.wxss */
+page {
+  padding: 0 22px;
+  box-sizing: border-box;
+  background: url('https://7363-scottwan-app-demo-7zo30-1301611203.tcb.qcloud.la/hi-ai-imgs/page-bk.png?sign=2fa17bebcd4896f2a48f5a812c832c56&t=1588662238');
+}
+
+.img-box {
+  margin-top: 54px;
+  width: 330px;
+  /* height: 330px; */
+  background: rgba(254, 230, 246, 1);
+  box-shadow: 0px 9px 8px 0px rgba(0, 0, 0, 0.22), 1px 3px 3px 0px rgba(255, 255, 255, 1);
+  border-radius: 20px;
+}
+
+.poster-img {
+  width: 300px;
+  /* height: 300px; */
+  /* background-color: white; */
+  margin: 15px;
+  border-radius: 15px;
+}
+
+.btn-area {
+  margin-top: 19px;
+}
+
+.btn-refresh {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+}
+
+.btn-create-poster {
+  /* width: 144px;
+  height: 33px; */
+  margin: auto 20rpx;
+  flex: 1 0 auto;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  line-height: 54px;
+
+  /* width: 500rpx; */
+  height: 54px;
+  background: linear-gradient(126deg, rgba(255, 147, 125, 1) 0%, rgba(255, 90, 71, 1) 100%);
+  border-radius: 15px;
+  filter: blur(0px);
+  padding: 0 12px;
+}
+
+.btn-share {
+  display: inline-block;
+  flex: 1 1 20%;
+
+  /* width: 30%; */
+  height: 54px;
+  background: linear-gradient(126deg, rgba(255, 180, 71, 1) 0%, rgba(255, 155, 52, 1) 100%);
+  border-radius: 15px;
+  filter: blur(0px);
+  padding: 0 6px;
+}
+
+.btn-share-text {
+  /* width: 28px;
+  height: 40px; */
+  font-size: 15px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  /* line-height: 27px; */
+}

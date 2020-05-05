@@ -72,6 +72,13 @@
 					"pathName": "pages/level-3/wareMask/index",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "level-3 poster",
+					"pathName": "pages/level-3/poster/index",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

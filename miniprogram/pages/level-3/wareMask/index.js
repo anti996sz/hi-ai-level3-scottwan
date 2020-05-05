@@ -30,6 +30,23 @@ Page({
       }
     })
 
+    let url = options.url
+    if(!url) return
+
+    this.setData({
+      cutImageSrc: url
+    })
+
+    wx.downloadFile({
+      url,
+      success (res) {
+        // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
+        if (res.statusCode === 200) {
+          that.processImg(res.tempFilePath)
+        }
+      }
+    })
+
   },
 
   /**
@@ -77,14 +94,46 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: async function () {
 
-    var DEFAULT_SHARE_COVER = 'https://n1image.hjfile.cn/res7/2020/04/26/2041af2867f22e62f8fce32b29cd1fb0.png';
+    let path = '/pages/level-3/poster/index'
+    let imageUrl = 'https://n1image.hjfile.cn/res7/2020/04/26/2041af2867f22e62f8fce32b29cd1fb0.png';
+
+    if(this.data.posterData){
+
+      imageUrl = this.data.posterData.posterSrc
+
+      // 上传图片到云
+
+      let {fileID} = await wx.cloud.uploadFile({
+        filePath: imageUrl,
+        cloudPath: 'poster/' + Date.now() + imageUrl.match(/\.[^.]+?$/)[0]
+      })
+
+      // let {fileList} = await wx.cloud.getTempFileURL({
+      //   fileList: [fileID]
+      // })
+
+      // imageUrl = fileList[0].tempFileURL
+
+      // 保存数据
+      let {_id} = await wx.cloud.database().collection('hi-ai-poster').add({
+        data: {
+          fileID,
+          // imageUrl
+        }
+      })
+
+      // 生成链接
+      path += `?id=${_id}`
+    }
+
+    // console.log(imageUrl)
 
     return {
       title: '让我们快快戴口罩，抗击疫情吧！',
-      imageUrl: this.data.posterData ? this.data.posterData.posterSrc : DEFAULT_SHARE_COVER,
-      path: '/pages/wear-a-mask/wear-a-mask'
+      imageUrl,
+      path
     };
 
   },
@@ -111,7 +160,8 @@ Page({
 
   onRemoveImage() {
     this.setData({
-      cutImageSrc: null
+      cutImageSrc: null,
+      maskList: []
     })
   },
 
@@ -129,12 +179,15 @@ Page({
 
     let mask = this.data.maskList[this.data.maskIndex]
 
-    mask.top = this.data.endY - this.data.startY + mask.top,
-      mask.left = this.data.endX - this.data.startX + mask.left,
+    mask.centerX += this.data.endX - this.data.startX
+    mask.centerY += this.data.endY - this.data.startY
 
-      this.setData({
-        maskList: this.data.maskList
-      })
+    mask.top += this.data.endY - this.data.startY,
+    mask.left += this.data.endX - this.data.startX,
+
+    this.setData({
+      maskList: this.data.maskList
+    })
 
     this.data.startX = this.data.endX
     this.data.startY = this.data.endY
@@ -192,26 +245,6 @@ Page({
     // 随机戴口罩
 
     this.wareMask(result)
-
-
-
-
-
-    // 上传到云空间
-
-    // let cloudPath = 'hi-ai-l3/' + Date.now() + filePath.match(/\.[^.]+?$/)[0]
-
-    // let {fileID} = wx.cloud.uploadFile({
-    //   filePath,
-    //   cloudPath
-    // })
-
-    // console.log(fileID)
-
-
-    // 检测人脸，返回每个人脸的位置信息
-
-    // 给每个人脸戴口罩
 
   },
 
@@ -324,14 +357,28 @@ Page({
 
   setMask(e){
     let maskId = e.mark.id
+
     if(this.data.currentShapeIndex >= 0){
+
       let mask = this.data.maskList[this.data.currentShapeIndex]
       mask.id = maskId
       
-      this.setData({
-        maskList: this.data.maskList
+    } else {
+
+      this.data.maskList.push({
+        id: maskId,
+        top: 100,
+        left:100,
+        width: 100,
+        height: 100,
+        centerX: 150,
+        centerY: 150
       })
     }
+
+    this.setData({
+      maskList: this.data.maskList
+    })
   },
 
   async generateImage(){
@@ -421,9 +468,11 @@ Page({
   },
 
   savePoster(){
-    var posterSrc = this.data.posterData.posterSrc;
+    
+    var filePath = this.data.posterData.posterSrc;
+
     wx.saveImageToPhotosAlbum({
-      filePath: posterSrc,
+      filePath,
       success(res) { 
         // console.log(res)
         wx.showToast({
@@ -431,6 +480,72 @@ Page({
         })
       }
     })
+  },
+
+  removeShape(e){
+    let index = e.mark.index
+    this.data.maskList.splice(index,1)
+    this.setData({
+      maskList: this.data.maskList
+    })
+  },
+
+  rotateStart(e) {
+    // console.log('touch start: ', e)
+    this.data.maskIndex = e.mark.index
+    this.data.startX = e.touches[0].clientX
+    this.data.startY = e.touches[0].clientY
+  },
+
+  rotateMove(e) {
+    // console.log('touch move: ', e)
+    this.data.endX = e.touches[0].clientX
+    this.data.endY = e.touches[0].clientY
+
+    let mask = this.data.maskList[this.data.maskIndex]
+
+    let diff_x_before = this.data.startX - mask.centerX;
+    let diff_y_before = this.data.startY - mask.centerY;
+    let diff_x_after = this.data.endX - mask.centerX;
+    let diff_y_after = this.data.endY - mask.centerY;
+
+    let angle_before =    (Math.atan2(diff_y_before, diff_x_before) / Math.PI) * 180;
+    let angle_after =    (Math.atan2(diff_y_after, diff_x_after) / Math.PI) * 180;
+
+    mask.rotate = angle_after - angle_before + this.rotate
+
+    this.setData({
+      maskList: this.data.maskList
+    })
+
+    this.data.startX = this.data.endX
+    this.data.startY = this.data.endY
+  },
+
+  resizeStart(e){
+    this.data.maskIndex = e.mark.index
+    this.data.startX = e.touches[0].clientX
+    this.data.startY = e.touches[0].clientY
+  },
+
+  resizeMove(e){
+    this.data.endX = e.touches[0].clientX
+    this.data.endY = e.touches[0].clientY
+
+    let mask = this.data.maskList[this.data.maskIndex]
+
+    mask.width += -(this.data.endX - this.data.startX) * 2
+    mask.height += -(this.data.endY - this.data.startY) * 2
+    mask.left -= -(this.data.endX - this.data.startX)
+    mask.top -= -(this.data.endY - this.data.startY)
+
+    this.setData({
+      maskList: this.data.maskList
+    })
+
+    this.data.startX = this.data.endX
+    this.data.startY = this.data.endY
+
   }
 
 })

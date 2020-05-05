@@ -1,0 +1,20 @@
+<!--miniprogram/pages/level-3/poster/index.wxml-->
+<view class="page">
+	<view class="img-box">
+		<image class="poster-img" src="{{imgSrc}}" mode="widthFix"></image>
+	</view>
+
+	<view class="flex flex-between btn-area">
+
+		<navigator url="/pages/level-3/wareMask/index?url={{imgSrc}}">
+			<image class="btn-refresh" src="../../../images/btn-refresh.png"></image>
+		</navigator>
+
+		<text class="btn-create-poster" bindtap="savePoster">生成分享海报</text>
+
+		<button class="btn-share" open-type="share">
+			<text class="btn-share-text">邀请\n好友</text>
+		</button>
+
+	</view>
+</view>

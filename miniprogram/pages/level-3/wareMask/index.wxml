@@ -39,10 +39,10 @@
 									<image class="mask" data-type="mask" mark:index="{{shapeIndex}}" src="../../../images/mask-{{mask.id}}@2x.png" style="" mode="aspectFit"  bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"></image>
 									<block wx:if="{{currentShapeIndex === shapeIndex}}">
 										<block>
-											<view class="image-btn-remove" data-shape-index="{{shapeIndex}}" bindtap="removeShape"></view>
-											<view class="image-btn-resize" data-shape-index="{{shapeIndex}}" data-type="rotate-resize"></view>
-											<view class="image-btn-reverse" data-shape-index="{{shapeIndex}}" bindtap="reverseShape"></view>
-											<view class="image-btn-checked" data-shape-index="{{shapeIndex}}" bindtap="checkedShape"></view>
+											<view class="image-btn-remove" mark:index="{{shapeIndex}}" bindtap="removeShape"></view>
+											<view class="image-btn-resize" mark:index="{{shapeIndex}}" bindtouchstart="rotateStart" bindtouchmove="rotateMove"></view>
+											<view class="image-btn-reverse" mark:index="{{shapeIndex}}" bindtouchstart="resizeStart" bindtouchmove="resizeMove"></view>
+											<view class="image-btn-checked" mark:index="{{shapeIndex}}" bindtap="checkedShape"></view>
 										</block>
 									</block>
 								</view>
