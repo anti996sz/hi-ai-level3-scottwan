@@ -21,7 +21,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": true,
+		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"appid": "wxd570e9f74c55ca29",
@@ -74,10 +74,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 3,
 					"name": "level-3 poster",
 					"pathName": "pages/level-3/poster/index",
-					"query": "",
+					"query": "id=982133855eb0fbae001413f93a359c5b",
 					"scene": null
 				}
 			]
