@@ -353,7 +353,7 @@ position absolute {
 
 .poster-image {
   width: 600rpx;
-  height: 600rpx;
+  /* height: 600rpx; */
 }
 
 .poster-image-tips {
@@ -380,7 +380,7 @@ position absolute {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 236rpx;
+  width: 250rpx;
   height: 80rpx;
   border: 2rpx solid #fff;
   color: #fff;
@@ -394,8 +394,8 @@ position absolute {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 66rpx;
-  width: 236rpx;
+  margin-left: 20rpx;
+  width: 300rpx;
   height: 80rpx;
   color: #fff;
   font-size: 30rpx;

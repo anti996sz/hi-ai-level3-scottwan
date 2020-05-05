@@ -4,7 +4,7 @@
 		<view class="{{'poster-dialog ' + (isShowPoster ? 'show' : '')}}">
 			<view class="poster-dialog-main">
 				<block wx:if="{{!!posterSrc}}">
-					<image class="poster-image" src="{{posterSrc}}" bindtap="previewPoster" show-menu-by-longpress="{{true}}"></image>
+					<image class="poster-image" src="{{posterSrc}}" bindtap="previewPoster" show-menu-by-longpress="{{true}}" mode="widthFix"></image>
 				</block>
 				<view class="poster-image-tips">点击可预览大图，长按可分享图片</view>
 				<view class="poster-dialog-close" bindtap="onHidePoster"></view>
@@ -113,6 +113,6 @@
                 </button>
             </block>
         </block> -->
-		<template is="renderPoster" data="{{...anonymousState__temp}}"></template>
+		<template is="renderPoster" data="{{...posterData}}"></template>
 	</view>
 </block>

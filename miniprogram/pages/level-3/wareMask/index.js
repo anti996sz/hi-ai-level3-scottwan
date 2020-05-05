@@ -79,6 +79,14 @@ Page({
    */
   onShareAppMessage: function () {
 
+    var DEFAULT_SHARE_COVER = 'https://n1image.hjfile.cn/res7/2020/04/26/2041af2867f22e62f8fce32b29cd1fb0.png';
+
+    return {
+      title: '让我们快快戴口罩，抗击疫情吧！',
+      imageUrl: this.data.posterData ? this.data.posterData.posterSrc : DEFAULT_SHARE_COVER,
+      path: '/pages/wear-a-mask/wear-a-mask'
+    };
+
   },
 
   onGetUserInfo(e) {
@@ -88,7 +96,7 @@ Page({
     })
 
     let that = this
-    
+
     wx.downloadFile({
       url: e.detail.userInfo.avatarUrl,
       success (res) {
@@ -281,16 +289,24 @@ Page({
       let width = (mouthEndPoints.rightPoint.X - mouthEndPoints.leftPoint.X) * 6 * picRatio
 
       // 嘴的中心减去口罩的宽度
-      let top = mouthEndPoints.leftPoint.Y * picRatio - width / 2
-      let left = (mouthEndPoints.rightPoint.X + mouthEndPoints.leftPoint.X) /2  * picRatio - width / 2
+      let centerX = (mouthEndPoints.rightPoint.X + mouthEndPoints.leftPoint.X) /2  * picRatio
+      let centerY = (mouthEndPoints.rightPoint.Y + mouthEndPoints.leftPoint.Y) /2  * picRatio
+      let top = centerY - width / 2
+      let left = centerX - width / 2
+
+      let diff_y = mouthEndPoints.rightPoint.Y - mouthEndPoints.leftPoint.Y
+      let diff_x = mouthEndPoints.rightPoint.X - mouthEndPoints.leftPoint.X
+      let rotate = (Math.atan2(diff_y, diff_x) / Math.PI) * 180;
 
       return {
         id,
+        centerX,
+        centerY,
         top,
         left,
         width,
         scale,
-        rotate: 0
+        rotate
       }
     })
 
@@ -316,6 +332,105 @@ Page({
         maskList: this.data.maskList
       })
     }
+  },
+
+  async generateImage(){
+
+    let {ImageWidth, ImageHeight} = this.data.faceData // 原图大小
+
+    // 画布宽度与高度
+    let width = 300 
+    let height = width * ImageHeight / ImageWidth
+
+    let canvasContext =  wx.createCanvasContext('canvasMask', this)
+    canvasContext.clearRect(0, 0, width, height);
+    canvasContext.drawImage(this.data.cutImageSrc, 0, 0, width, height);
+
+    for(var index = 0; index < this.data.maskList.length; index++){
+
+      let mask = this.data.maskList[index]
+
+      // 部分口罩图片不是正方形，直接绘制会变形
+      let maskImgSrc = `../../../images/mask-${mask.id}@2x.png`
+      let maskImgInfo = await new Promise(function (resolve, reject) {
+
+        wx.getImageInfo({
+
+          src: maskImgSrc,
+
+          success(res){
+            resolve(res);
+          },
+
+          fail(error) {
+            // console.log(error)
+            reject(error)
+          }
+        })
+  
+      });
+
+      // console.log(maskImgInfo)
+      let maskHeight = mask.width * maskImgInfo.height / maskImgInfo.width
+
+      canvasContext.save()
+      canvasContext.translate(mask.centerX, mask.centerY);
+      canvasContext.rotate(mask.rotate * Math.PI / 180)
+      canvasContext.drawImage(maskImgSrc, -mask.width / 4,  -maskHeight / 4, mask.width / 2, maskHeight / 2)
+      canvasContext.restore()
+
+    }
+
+    let that = this
+
+    canvasContext.draw(true, () => {
+      
+      wx.canvasToTempFilePath({
+        canvasId: 'canvasMask',
+        x: 0,
+        y: 0,
+        height,
+        width,
+        fileType: 'jpg',
+        quality: 0.9,
+        success: function success(res) {
+          that.setData({
+            posterData: {
+              posterSrc: res.tempFilePath,
+              isShowPoster: true
+            }
+          });
+        },
+        fail: function fail() {
+          wx.showToast({
+            title: '图片生成失败，请重试'
+          });
+        }
+      });
+    })
+
+  },
+
+  onHidePoster(){
+    this.setData({
+      posterData: {
+        posterSrc: null,
+        isShowPoster: false
+      }
+    })
+  },
+
+  savePoster(){
+    var posterSrc = this.data.posterData.posterSrc;
+    wx.saveImageToPhotosAlbum({
+      filePath: posterSrc,
+      success(res) { 
+        // console.log(res)
+        wx.showToast({
+          title: '保存到相册成功',
+        })
+      }
+    })
   }
 
 })
